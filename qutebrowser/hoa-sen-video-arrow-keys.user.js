@@ -16,6 +16,10 @@ let statusTimer;
 let controlsVideo;
 let controlsWereEnabled;
 let controlsTimer;
+let timelineElement;
+let timelineProgress;
+let timelineThumb;
+let timelineTimer;
 
 document.addEventListener("keydown", handleKeydown, true);
 
@@ -81,7 +85,8 @@ function handleKeydown(event) {
   if (targetTime === video.currentTime) return;
 
   video.currentTime = targetTime;
-  video.currentTime = targetTime;
+  showVideoControls(video);
+  showTimeline(video, targetTime, video.duration);
   event.preventDefault();
   event.stopImmediatePropagation();
   showSeekStatus(direction, targetTime, video.duration);
@@ -102,6 +107,56 @@ function showVideoControls(video) {
     if (!controlsWereEnabled) video.controls = false;
     controlsVideo = null;
     controlsWereEnabled = null;
+  }, 2000);
+}
+
+function showTimeline(video, currentTime, duration) {
+  if (!timelineElement) {
+    timelineElement = document.createElement("div");
+    timelineProgress = document.createElement("div");
+    timelineThumb = document.createElement("div");
+    timelineElement.style.cssText = [
+      "position:fixed",
+      "z-index:2147483647",
+      "height:4px",
+      "border-radius:4px",
+      "background:rgba(255,255,255,.35)",
+      "pointer-events:none",
+      "box-shadow:0 0 2px rgba(0,0,0,.8)",
+    ].join(";");
+    timelineProgress.style.cssText = [
+      "position:absolute",
+      "top:0",
+      "left:0",
+      "height:100%",
+      "border-radius:4px",
+      "background:#1479e9",
+    ].join(";");
+    timelineThumb.style.cssText = [
+      "position:absolute",
+      "top:50%",
+      "width:10px",
+      "height:10px",
+      "border-radius:50%",
+      "background:#fff",
+      "transform:translate(-5px,-50%)",
+    ].join(";");
+    timelineElement.append(timelineProgress, timelineThumb);
+    (document.body || document.documentElement).append(timelineElement);
+  }
+
+  const rect = video.getBoundingClientRect();
+  const percentage = clamp((currentTime / duration) * 100, 0, 100);
+  timelineElement.style.left = `${rect.left}px`;
+  timelineElement.style.top = `${Math.max(0, rect.bottom - 14)}px`;
+  timelineElement.style.width = `${rect.width}px`;
+  timelineElement.style.display = "block";
+  timelineProgress.style.width = `${percentage}%`;
+  timelineThumb.style.left = `${percentage}%`;
+
+  clearTimeout(timelineTimer);
+  timelineTimer = setTimeout(function() {
+    timelineElement.style.display = "none";
   }, 2000);
 }
 
