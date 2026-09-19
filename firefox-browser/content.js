@@ -6,6 +6,9 @@ const DEFAULT_SETTINGS = Object.freeze({
 let settings = { ...DEFAULT_SETTINGS };
 let statusElement;
 let statusTimer;
+let controlsVideo;
+let controlsWereEnabled;
+let controlsTimer;
 
 void loadSettings();
 
@@ -75,9 +78,28 @@ function handleKeydown(event) {
   if (targetTime === video.currentTime) return;
 
   video.currentTime = targetTime;
+  video.currentTime = targetTime;
   event.preventDefault();
   event.stopImmediatePropagation();
   showSeekStatus(direction, targetTime, video.duration);
+}
+
+function showVideoControls(video) {
+  clearTimeout(controlsTimer);
+
+  if (controlsVideo !== video) {
+    controlsVideo = video;
+    controlsWereEnabled = video.controls;
+  }
+
+  video.controls = true;
+  controlsTimer = setTimeout(() => {
+    if (controlsVideo !== video) return;
+
+    if (!controlsWereEnabled) video.controls = false;
+    controlsVideo = null;
+    controlsWereEnabled = null;
+  }, 2000);
 }
 
 function isTextEditingTarget(target) {

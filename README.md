@@ -9,6 +9,7 @@ Keyboard controls for seeking native videos on `dttt.hoasen.edu.vn`.
 - Press **Left Arrow** to seek backward.
 - Press **Right Arrow** to seek forward.
 - Press **Space** to pause or resume the video.
+- The video timeline appears for two seconds after seeking with an arrow key.
 - Integrate a popup for enabling or disabling shortcuts and choosing a 5, 10, 15, or 30 second interval.
 
 ### Installation
@@ -37,6 +38,7 @@ installation, package and sign the extension through the
 - Nhấn **mũi tên trái** để tua lùi video.
 - Nhấn **mũi tên phải** để tua tới video.
 - Nhấn **phím cách (Space)** để tạm dừng hoặc tiếp tục video.
+- Thanh thời gian của video sẽ hiện trong hai giây sau khi tua bằng phím mũi tên.
 - Có cửa sổ bật lên để bật hoặc tắt phím tắt và chọn khoảng tua 5, 10, 15 hoặc 30 giây.
 
 ### Cài đặt

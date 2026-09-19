@@ -28,6 +28,7 @@ Set `SEEK_SECONDS` near the top of
 - **Left Arrow** seeks backward.
 - **Right Arrow** seeks forward.
 - **Space** pauses or resumes the video.
+- The video timeline appears for two seconds after seeking with an arrow key.
 
 Shortcuts do not run while typing in a form field and do not override browser
 shortcuts involving modifier keys.

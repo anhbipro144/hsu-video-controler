@@ -13,6 +13,9 @@ const SEEK_SECONDS = 5;
 
 let statusElement;
 let statusTimer;
+let controlsVideo;
+let controlsWereEnabled;
+let controlsTimer;
 
 document.addEventListener("keydown", handleKeydown, true);
 
@@ -78,9 +81,28 @@ function handleKeydown(event) {
   if (targetTime === video.currentTime) return;
 
   video.currentTime = targetTime;
+  video.currentTime = targetTime;
   event.preventDefault();
   event.stopImmediatePropagation();
   showSeekStatus(direction, targetTime, video.duration);
+}
+
+function showVideoControls(video) {
+  clearTimeout(controlsTimer);
+
+  if (controlsVideo !== video) {
+    controlsVideo = video;
+    controlsWereEnabled = video.controls;
+  }
+
+  video.controls = true;
+  controlsTimer = setTimeout(function() {
+    if (controlsVideo !== video) return;
+
+    if (!controlsWereEnabled) video.controls = false;
+    controlsVideo = null;
+    controlsWereEnabled = null;
+  }, 2000);
 }
 
 function isTextEditingTarget(target) {
