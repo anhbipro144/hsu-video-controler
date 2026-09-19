@@ -1,0 +1,33 @@
+{
+  "manifest_version": 3,
+  "name": "Hoa Sen Video Arrow Keys",
+  "version": "1.0.0",
+  "description": "Seek Hoa Sen LMS videos with the left and right arrow keys.",
+  "browser_specific_settings": {
+    "gecko": {
+      "id": "hoa-sen-video-arrow-keys@local"
+    }
+  },
+  "permissions": [
+    "storage"
+  ],
+  "host_permissions": [
+    "https://dttt.hoasen.edu.vn/*"
+  ],
+  "content_scripts": [
+    {
+      "matches": [
+        "https://dttt.hoasen.edu.vn/*"
+      ],
+      "js": [
+        "content.js"
+      ],
+      "run_at": "document_start",
+      "all_frames": true
+    }
+  ],
+  "action": {
+    "default_title": "Hoa Sen Video Arrow Keys",
+    "default_popup": "popup.html"
+  }
+}
