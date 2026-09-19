@@ -16,6 +16,10 @@ let statusTimer;
 document.addEventListener("keydown", handleKeydown, true);
 
 function handleKeydown(event) {
+  const isSeekKey = event.key === "ArrowLeft" || event.key === "ArrowRight";
+  const isPauseKey =
+    event.code === "Space" || event.key === " " || event.key === "Spacebar";
+
   if (
     event.defaultPrevented ||
     event.repeat ||
@@ -23,14 +27,31 @@ function handleKeydown(event) {
     event.ctrlKey ||
     event.metaKey ||
     event.shiftKey ||
-    (event.key !== "ArrowLeft" && event.key !== "ArrowRight") ||
+    (!isSeekKey && !isPauseKey) ||
     isTextEditingTarget(event.target)
   ) {
     return;
   }
 
   const video = getBestVideo();
-  if (!video || !Number.isFinite(video.duration)) return;
+  if (!video) return;
+
+  if (isPauseKey) {
+    const willPause = !video.paused;
+
+    if (willPause) {
+      video.pause();
+    } else {
+      void video.play();
+    }
+
+    event.preventDefault();
+    event.stopImmediatePropagation();
+    showPlaybackStatus(willPause);
+    return;
+  }
+
+  if (!Number.isFinite(video.duration)) return;
 
   const direction = event.key === "ArrowRight" ? 1 : -1;
   const targetTime = clamp(
@@ -119,6 +140,38 @@ function showSeekStatus(direction, currentTime, duration) {
 
   const sign = direction > 0 ? "+" : "-";
   statusElement.textContent = `${sign}${SEEK_SECONDS}s  ${formatTime(currentTime)} / ${formatTime(duration)}`;
+  statusElement.style.opacity = "1";
+
+  statusTimer = setTimeout(() => {
+    statusElement.style.opacity = "0";
+  }, 900);
+}
+
+function showPlaybackStatus(isPaused) {
+  clearTimeout(statusTimer);
+
+  if (!statusElement) {
+    statusElement = document.createElement("div");
+    statusElement.setAttribute("aria-live", "polite");
+    statusElement.style.cssText = [
+      "position:fixed",
+      "z-index:2147483647",
+      "top:16px",
+      "left:50%",
+      "transform:translateX(-50%)",
+      "padding:8px 12px",
+      "border-radius:6px",
+      "background:rgba(0, 0, 0, 0.78)",
+      "color:#fff",
+      "font:600 14px/1.2 system-ui, sans-serif",
+      "pointer-events:none",
+      "opacity:0",
+      "transition:opacity 120ms ease",
+    ].join(";");
+    document.documentElement.append(statusElement);
+  }
+
+  statusElement.textContent = isPaused ? "Paused" : "Playing";
   statusElement.style.opacity = "1";
 
   statusTimer = setTimeout(() => {

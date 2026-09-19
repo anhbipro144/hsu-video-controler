@@ -18,6 +18,7 @@ On a Hoa Sen LMS page containing a video:
 
 - **Left Arrow** seeks backward.
 - **Right Arrow** seeks forward.
+- **Space** pauses or resumes the video.
 
 The toolbar popup lets you disable the shortcuts or choose a 5, 10, 15, or 30
 second seek interval. Shortcuts do not run while typing in a form field and do
