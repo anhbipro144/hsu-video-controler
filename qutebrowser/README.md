@@ -12,6 +12,10 @@ videos on `dttt.hoasen.edu.vn` with the left and right arrow keys.
 4. Reload the Hoa Sen LMS page.
 
 The script requires JavaScript to be enabled for `dttt.hoasen.edu.vn`.
+Qutebrowser's normal mode may consume the arrow and Space keys before the page
+receives them. Click the video and press `i` to enter insert mode, or press
+`Ctrl-V` to enter passthrough mode, before using the controls. Press `Escape`
+to leave passthrough mode.
 
 ## Configure
 

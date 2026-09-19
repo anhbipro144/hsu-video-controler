@@ -4,7 +4,8 @@
 // @version      1.0.0
 // @description  Seek Hoa Sen LMS videos with the left and right arrow keys.
 // @match        https://dttt.hoasen.edu.vn/*
-// @run-at       document-start
+// @include      https://dttt.hoasen.edu.vn/*
+// @run-at       document-end
 // @grant        none
 // ==/UserScript==
 
@@ -16,9 +17,18 @@ let statusTimer;
 document.addEventListener("keydown", handleKeydown, true);
 
 function handleKeydown(event) {
-  const isSeekKey = event.key === "ArrowLeft" || event.key === "ArrowRight";
+  const isSeekKey =
+    event.key === "ArrowLeft" ||
+    event.key === "Left" ||
+    event.key === "ArrowRight" ||
+    event.key === "Right" ||
+    event.keyCode === 37 ||
+    event.keyCode === 39;
   const isPauseKey =
-    event.code === "Space" || event.key === " " || event.key === "Spacebar";
+    event.code === "Space" ||
+    event.key === " " ||
+    event.key === "Spacebar" ||
+    event.keyCode === 32;
 
   if (
     event.defaultPrevented ||
@@ -53,7 +63,12 @@ function handleKeydown(event) {
 
   if (!Number.isFinite(video.duration)) return;
 
-  const direction = event.key === "ArrowRight" ? 1 : -1;
+  const direction =
+    event.key === "ArrowRight" ||
+    event.key === "Right" ||
+    event.keyCode === 39
+      ? 1
+      : -1;
   const targetTime = clamp(
     video.currentTime + direction * SEEK_SECONDS,
     0,
