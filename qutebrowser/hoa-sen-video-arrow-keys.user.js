@@ -20,6 +20,7 @@ let timelineElement;
 let timelineProgress;
 let timelineThumb;
 let timelineTimer;
+let timelineHost;
 
 document.addEventListener("keydown", handleKeydown, true);
 
@@ -101,6 +102,9 @@ function showVideoControls(video) {
   }
 
   video.controls = true;
+  if (typeof video.focus === "function") {
+    video.focus({ preventScroll: true });
+  }
   controlsTimer = setTimeout(function() {
     if (controlsVideo !== video) return;
 
@@ -111,6 +115,17 @@ function showVideoControls(video) {
 }
 
 function showTimeline(video, currentTime, duration) {
+  var fullscreenElement =
+    document.fullscreenElement || document.webkitFullscreenElement;
+
+  if (fullscreenElement === video) {
+    video.controls = true;
+    return;
+  }
+
+  var host =
+    fullscreenElement || document.body || document.documentElement;
+
   if (!timelineElement) {
     timelineElement = document.createElement("div");
     timelineProgress = document.createElement("div");
@@ -142,7 +157,11 @@ function showTimeline(video, currentTime, duration) {
       "transform:translate(-5px,-50%)",
     ].join(";");
     timelineElement.append(timelineProgress, timelineThumb);
-    (document.body || document.documentElement).append(timelineElement);
+    host.append(timelineElement);
+    timelineHost = host;
+  } else if (timelineHost !== host) {
+    host.append(timelineElement);
+    timelineHost = host;
   }
 
   const rect = video.getBoundingClientRect();
